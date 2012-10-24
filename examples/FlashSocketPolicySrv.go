@@ -1,9 +1,9 @@
 package main
 
 import (
-	"GoPray"
+	"../socket"
 )
 
 func main() {
-	GoPray.Crossdomain()
+	socket.Crossdomain()
 }

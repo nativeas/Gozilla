@@ -1,4 +1,4 @@
-package GoPray
+package socket
 
 import (
 	"log"
