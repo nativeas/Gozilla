@@ -1,2 +1,8 @@
 Gozilla
 =======
+
+# Structure
+
+# Todos
+
+# Vision
