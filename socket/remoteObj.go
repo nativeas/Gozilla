@@ -46,9 +46,6 @@ DAEMON_LOOP:
 		case obj := <-r.Input:
 			log.Println("INPUT")
 			r.send(obj)
-			// case obj := <-r.Output:
-			// 	log.Printf("OUTPUT,mcmd:%d,smcd:%d,content:%s", obj.MainCMD, obj.SubCMD,
-			// 		obj.ComandContent)
 		}
 	}
 	log.Println("end deamon()")
