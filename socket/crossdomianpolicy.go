@@ -1,4 +1,4 @@
-package GoPray 
+package GoPray
 
 import (
 	"log"
@@ -7,8 +7,6 @@ import (
 
 /*
 Crossdomain() function impl the flash socket connection policy service.
-
-
 */
 func Crossdomain() {
 	courent := "<cross-domain-policy><allow-access-from domain=\"*\" to-ports=\"*\" /></cross-domain-policy>\n"
@@ -28,7 +26,7 @@ func Crossdomain() {
 
 		log.Println("Someone connected!")
 		conn.Write(data)
-		log.Print(		conn.RemoteAddr(),conn.LocalAddr())
+		log.Print(conn.RemoteAddr(), conn.LocalAddr())
 		conn.Close()
 	}
 
