@@ -2,6 +2,7 @@ package socket
 
 import (
 	"encoding/gob"
+	"errors"
 	"log"
 	"net"
 )
@@ -10,6 +11,7 @@ import (
 远端对象
 */
 type RemoteObject struct {
+	ObjId      int
 	RemoteAddr net.Addr
 	Conn       net.Conn
 	Input      chan SocketCommand
@@ -19,10 +21,11 @@ type RemoteObject struct {
 	dec        *gob.Decoder
 }
 
-func NewRemoteObject(conn net.Conn) RemoteObject {
+func NewRemoteObject(conn net.Conn, id int) RemoteObject {
 	log.Println("new remote object")
 	object := new(RemoteObject)
 	object.Conn = conn
+	object.ObjId = id
 	object.Input = make(chan SocketCommand)
 	object.Output = make(chan SocketCommand)
 	object.Close = make(chan int)
@@ -33,36 +36,42 @@ func NewRemoteObject(conn net.Conn) RemoteObject {
 }
 
 func (r *RemoteObject) daemon() {
+DAEMON_LOOP:
 	for {
 		select {
 		case <-r.Close:
 			log.Println("CLOSE")
-			break
+			r.Conn.Close()
+			break DAEMON_LOOP
 		case obj := <-r.Input:
 			log.Println("INPUT")
 			r.send(obj)
-		case obj := <-r.Output:
-			log.Printf("OUTPUT,mcmd:%d,smcd:%d,content:%s", obj.MainCMD, obj.SubCMD,
-				obj.ComandContent)
+			// case obj := <-r.Output:
+			// 	log.Printf("OUTPUT,mcmd:%d,smcd:%d,content:%s", obj.MainCMD, obj.SubCMD,
+			// 		obj.ComandContent)
 		}
 	}
+	log.Println("end deamon()")
 }
 
 func (r *RemoteObject) send(cmd SocketCommand) {
 	err := r.enc.Encode(cmd)
 	if err != nil {
+		log.Println("SEND()")
 		log.Fatal(err)
 	}
 	log.Println("send complete")
 }
 
-func (r *RemoteObject) Read() {
+func (r *RemoteObject) Read() (cmd SocketCommand, err error) {
 	readedObj := new(SocketCommand)
 	// var q SocketCommand
-	err := r.dec.Decode(&readedObj)
-	if err != nil {
-		log.Fatal(err)
+	errb := r.dec.Decode(&readedObj)
+	if errb != nil {
+		log.Println("READ()")
+		//make some quit
+		return *readedObj, errors.New("client disconnect")
 	}
-	r.Output <- *readedObj
-	r.Read()
+	// r.Output <- *readedObj
+	return *readedObj, nil
 }
