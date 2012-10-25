@@ -1,9 +1,5 @@
 package packet
 
-import (
-	"fmt"
-)
-
 type STPacketBase struct {
 	BTMainCmd byte
 	BTSubCmd  byte
