@@ -4,8 +4,8 @@ Gozilla
 ## Structure
 
 ## Todos
-* 基础的TCP通讯
-* 基础的socket 命令结构
+* 基础的TCP通讯 
+* 基础的socket 命令结构 
 * 标准的逻辑、数据通讯逻辑分拆结构
 
 ## Vision
@@ -13,3 +13,4 @@ Gozilla
 * 需要提供高性能
 * 高扩展性
 * 高缩放性
+* 模拟一个“神仙道”环境
