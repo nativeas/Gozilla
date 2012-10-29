@@ -4,7 +4,8 @@ Gozilla
 ## Structure
 * examples
 > 代码实现范例，直接build用
-
+* socket
+> remote side control impl code
 
 
 ## Todos
