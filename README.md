@@ -2,6 +2,13 @@ Gozilla
 =======
 
 ## Structure
+* examples
+> 代码实现范例，直接build用
+* 业务模块
+* encoding amf
+* test 
+* package
+
 
 ## Todos
 * 基础的TCP通讯 
