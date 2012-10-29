@@ -10,7 +10,7 @@ Gozilla
 
 > remote side control impl code
 
-*packet
+* packet
 
 > impl some packet package asom
 
