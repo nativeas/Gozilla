@@ -16,7 +16,8 @@ Gozilla
 
 
 ## Todos
-* 数据存贮 (cache db)
+* 数据存贮 (cache db)  
+> redis (ref:http://blog.nosqlfan.com/html/3537.html)
 * 主干逻辑模块
 * 模块路由实现
 * 玩家认证模块
