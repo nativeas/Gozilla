@@ -26,8 +26,8 @@ func Process(p I) {
 	case *packet.STPreLogin:
 		{
 			log.Println("Recv 0x0101")
-			fmt.Printf("\n")
 		}
+		break
 	case *packet.STPreLoginRet:
 		{
 			log.Println("Recv 0x0102")

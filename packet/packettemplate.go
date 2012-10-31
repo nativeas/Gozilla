@@ -1,5 +1,8 @@
 package packet
 
+type I interface {
+}
+
 type STPacketBase struct {
 	BTMainCmd byte
 	BTSubCmd  byte
