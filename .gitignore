@@ -19,6 +19,7 @@ _cgo_export.*
 
 _testmain.go
 
+#osx fils
 .DS_Store
 
 #win32 compiled files
