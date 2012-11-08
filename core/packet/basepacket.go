@@ -14,6 +14,8 @@ type GozillaPacket struct {
 type IGozillaPacket interface {
 	GetMainCmd() byte
 	GetSubCmd() byte
+	SetMainCmd(MainCmd byte)
+	SetSubCmd(SubCmd byte)
 	Init()
 }
 
@@ -27,6 +29,14 @@ func (g *GozillaPacket) GetMainCmd() byte {
 // 主要用于标识实际的操作
 func (g *GozillaPacket) GetSubCmd() byte {
 	return g.SubCmd
+}
+
+func (g *GozillaPacket) SetMainCmd(MainCmd byte) {
+	g.MainCmd = MainCmd
+}
+
+func (g *GozillaPacket) SetSubCmd(SubCmd byte) {
+	g.SubCmd = SubCmd
 }
 
 //

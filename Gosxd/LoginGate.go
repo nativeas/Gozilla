@@ -1,10 +1,22 @@
 package main
 
 import (
+	"../core/socket"
 	"log"
 )
 
+// 实现了一个服务器的机制
+// s.Output用来切换到逻辑线程
 func main() {
-	log.Println("GoSXD LoginGate Dummy")
-	log.Println("You should fill code to this file")
+	s := socket.NewRemoteRoom("127.0.0.1:8080")
+	log.Print(s)
+	go s.StartDaemon()
+	for {
+		select {
+		case obj := <-s.Output:
+			log.Println(obj) //这里可以切换到逻辑线程
+			log.Println("Push to Gate Logic to push to Server")
+
+		}
+	}
 }
