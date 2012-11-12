@@ -1,29 +1,33 @@
 package socket
 
 import (
-	"../player"
+	// "../player"
 	"container/list"
 	"log"
 	"net"
 	"os"
 )
 
-//socketServer 对象
-type RemoteRoom struct {
-	listenAddr   string              //监听 地址
-	remoteList   *list.List          //远端对象列表
-	Output       chan TargetdCommand // 输出数据包
-	PlayerRouter player.IPlayerComamndRouter
-	nextClientId int
+type CommandRouter interface {
+	PushPacket(NclientId int, packet packet.IGozillaPacket)
 }
 
-func NewRemoteRoom(listenAddr string, router player.IPlayerComamndRouter) RemoteRoom {
+//socketServer 对象
+type RemoteRoom struct {
+	listenAddr    string              //监听 地址
+	remoteList    *list.List          //远端对象列表
+	Output        chan TargetdCommand // 输出数据包
+	commandRouter CommandRouter
+	nextClientId  int
+}
+
+func NewRemoteRoom(listenAddr string, commandRouter CommandRouter) RemoteRoom {
 	r := new(RemoteRoom)
 	r.listenAddr = listenAddr
 	r.remoteList = list.New()
 	r.Output = make(chan TargetdCommand)
 	r.nextClientId = -1
-	r.PlayerRouter = router
+	r.commandRouter = commandRouter
 	return *r
 }
 
@@ -68,7 +72,7 @@ func (r *RemoteRoom) remoteObjectReader(obj RemoteObject) {
 			r.closeRemoteObject(obj)
 			break
 		}
-		r.PlayerRouter.PushCommand(string(obj.ObjId), cmd)
+		r.commandRouter.PushPacket(string(obj.ObjId), cmd)
 
 		// log.Printf("OUTPUT TCMD,target:%s,mcmd:%d,smcd:%d,content:%s",
 		// 	tcmd.TaretId, cmd.MainCMD, cmd.SubCMD, cmd.ComandContent)

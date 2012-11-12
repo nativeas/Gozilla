@@ -10,8 +10,8 @@ type PlayerObj struct {
 	Lmsg      *list.List
 }
 
-func newPlayerObj(nid int) *PlayerObj{
-	obj:= new(PlayerObj)
+func newPlayerObj(nid int) *PlayerObj {
+	obj := new(PlayerObj)
 	obj.NclientId = nid
 	obj.Lmsg = list.New()
 	return obj
@@ -36,7 +36,7 @@ func (p *PlayerCollection) Init() {
 }
 
 func (p *PlayerCollection) CreatePlayer(Nclient int) {
-	map[Nclient] = newPlayerObj(Nclient)
+	p.players[Nclient] = newPlayerObj(Nclient)
 }
 
 func (p *PlayerCollection) RemovePlayer(Nclient int) {
@@ -44,14 +44,17 @@ func (p *PlayerCollection) RemovePlayer(Nclient int) {
 }
 
 func (p *PlayerCollection) Search(NclientID int) *PlayerObj {
-	player,ok:=p.players[NclientID]
-	if ok{
+	player, ok := p.players[NclientID]
+	if ok {
 		return player
 	}
 	return nil
 }
 
-
-func (p *PlayerCollection) Pump() (p *PlayerObj, cmd packet.IGozillaPacket){
+func (p *PlayerCollection) Pump() (*PlayerObj, packet.IGozillaPacket) {
 	return nil, nil
+}
+
+func (p *PlayerCollection) PushPacket(NclientId int, packet packet.IGozillaPacket) {
+
 }
