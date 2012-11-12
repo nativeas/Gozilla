@@ -1,13 +1,18 @@
 package socket
 
 import (
+	"../packet"
 	"encoding/gob"
-	"errors"
+	// "errors"
 	"log"
 	"net"
+	// "reflect"
 )
 
-type inputObj interface{}
+type cmdObj interface{}
+type gobObj struct {
+	Obj cmdObj
+}
 
 /*
 远端对象
@@ -16,7 +21,7 @@ type RemoteObject struct {
 	ObjId      int
 	RemoteAddr net.Addr
 	Conn       net.Conn
-	Input      chan inputObj
+	Input      chan packet.IGozillaPacket
 	Output     chan SocketCommand
 	Close      chan int
 	enc        *gob.Encoder
@@ -28,7 +33,7 @@ func NewRemoteObject(conn net.Conn, id int) RemoteObject {
 	object := new(RemoteObject)
 	object.Conn = conn
 	object.ObjId = id
-	object.Input = make(chan inputObj)
+	object.Input = make(chan packet.IGozillaPacket)
 	object.Output = make(chan SocketCommand)
 	object.Close = make(chan int)
 	object.dec = gob.NewDecoder(object.Conn)
@@ -53,24 +58,31 @@ DAEMON_LOOP:
 	log.Println("end deamon()")
 }
 
-func (r *RemoteObject) send(cmd inputObj) {
-	err := r.enc.Encode(cmd)
-	if err != nil {
-		log.Println("SEND()")
-		log.Fatal(err)
-	}
+func (r *RemoteObject) send(cmd packet.IGozillaPacket) {
+	// obj:= new(gobObj)
+	// // obj.Obj = cmd
+	// err := r.enc.Encode(cmd)
+	// if err != nil {
+	// 	log.Println("SEND()")
+	// 	log.Fatal(err)
+	// }
+	codec := new(PCodec)
+	codec.Write(r.Conn, cmd)
 	log.Println("send complete")
 }
 
-func (r *RemoteObject) Read() (cmd SocketCommand, err error) {
-	readedObj := new(SocketCommand)
+func (r *RemoteObject) Read() (cmd packet.IGozillaPacket, err error) {
+
+	codec := new(PCodec)
+	readObj, _ := codec.Read(r.Conn)
+	// readedObj := new(interface{})
 	// var q SocketCommand
-	errb := r.dec.Decode(&readedObj)
-	if errb != nil {
-		log.Println("READ()")
-		//make some quit
-		return *readedObj, errors.New("client disconnect")
-	}
+	// errb := r.dec.Decode(&readedObj)
+	// if errb != nil {
+	// 	log.Println("READ()", errb)
+	// 	//make some quit
+	// 	return *readedObj, errors.New("client disconnect")
+	// }
 	// r.Output <- *readedObj
-	return *readedObj, nil
+	return readObj, nil
 }

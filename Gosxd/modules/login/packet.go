@@ -2,6 +2,7 @@ package login
 
 import (
 	"../../../core/packet"
+	"../../../core/socket"
 	"../../modules"
 )
 
@@ -23,6 +24,7 @@ func (l *basePacket) Init() {
 
 type PreLogin struct {
 	basePacket
+	Name string
 }
 
 func (p *PreLogin) Init() {
@@ -30,7 +32,13 @@ func (p *PreLogin) Init() {
 	p.SubCmd = CMD_PRELOGIN
 }
 
-type PreLogin_Reply struct{}{
-	basePacket
+func NewPreLogin() packet.IGozillaPacket {
+	p := new(PreLogin)
+	p.Init()
+	return p
 }
 
+func init() {
+	p := NewPreLogin()
+	socket.RegisterCommand(packet.IGozillaPacket(p), NewPreLogin)
+}

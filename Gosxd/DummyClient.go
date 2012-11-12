@@ -1,7 +1,9 @@
 package main
 
 import (
+	"../core/packet"
 	"../core/socket"
+	"./modules/login"
 	"log"
 	"net"
 	"os"
@@ -16,14 +18,15 @@ func main() {
 		os.Exit(1)
 	}
 	r := socket.NewRemoteObject(conn, 0)
-	obj := socket.NewSocketCommand(1, 2, "fff")
+	var obj packet.IGozillaPacket = new(login.PreLogin)
+	obj.Init()
 	r.Input <- obj
-	obj = socket.NewSocketCommand(3, 2, "fff")
-	r.Input <- obj
-	obj = socket.NewSocketCommand(4, 2, "fff")
-	r.Input <- obj
-	obj = socket.NewSocketCommand(5, 2, "fff")
-	r.Input <- obj
+	// obj = socket.NewSocketCommand(3, 2, "fff")
+	// r.Input <- obj
+	// obj = socket.NewSocketCommand(4, 2, "fff")
+	// r.Input <- obj
+	// obj = socket.NewSocketCommand(5, 2, "fff")
+	// r.Input <- obj
 	for {
 		_, err := r.Read()
 		if err != nil {

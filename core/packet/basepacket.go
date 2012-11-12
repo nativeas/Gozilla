@@ -46,27 +46,3 @@ func (g *GozillaPacket) SetSubCmd(SubCmd byte) {
 func (g *GozillaPacket) Init() {
 
 }
-
-//login packet sample
-
-// type LoginPacket struct {
-// 	GozillaPacket
-// }
-
-// const (
-// 	LOGIN_MOD    = 1
-// 	PRELOGIN_CMD = 1
-// )
-
-// func (l *LoginPacket) Init() {
-// 	l.MainCmd = LOGIN_MOD
-// }
-
-// type PreloginPacket struct {
-// 	LoginPacket
-// }
-
-// func (p *PreloginPacket) Init() {
-// 	p.LoginPacket.Init()
-// 	p.SubCmd = PRELOGIN_CMD
-// }
