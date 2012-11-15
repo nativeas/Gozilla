@@ -19,16 +19,19 @@ func newPlayerObj(nid int) *PlayerObj {
 
 type PlayerCollection struct {
 	players map[int]*PlayerObj
+	msgQue  *list.List
 }
 
 func (p *PlayerCollection) Init() {
 	p.players = make(map[int]*PlayerObj)
+	p.msgQue = list.New()
 }
 
 func (p *PlayerCollection) CreatePlayer(Nclient int) {
 	p.players[Nclient] = newPlayerObj(Nclient)
 }
 
+//移除玩家
 func (p *PlayerCollection) RemovePlayer(Nclient int) {
 	delete(p.players, Nclient)
 }
@@ -46,5 +49,5 @@ func (p *PlayerCollection) Pump() (*PlayerObj, packet.IGozillaPacket) {
 }
 
 func (p *PlayerCollection) PushPacket(NclientId int, packet packet.IGozillaPacket) {
-
+	p.msgQue.PushBack(NclientId)
 }

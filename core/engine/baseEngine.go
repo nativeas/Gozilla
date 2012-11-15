@@ -4,14 +4,18 @@ import (
 	"../packet"
 )
 
+const (
+	CORE_VER = "alpha1"
+)
+
 type Engine struct {
 	Version string
 	Modules map[byte]BaseModule
 	players *PlayerCollection
 }
 
-func (e *Engine) Init(ver string) {
-	e.Version = ver
+func (e *Engine) Init() {
+	e.Version = CORE_VER
 	e.players = new(PlayerCollection)
 	e.players.Init()
 }
