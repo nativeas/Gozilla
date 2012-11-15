@@ -17,22 +17,12 @@ func newPlayerObj(nid int) *PlayerObj {
 	return obj
 }
 
-func (p *PlayerObj) pushMsg(msg packet.IGozillaPacket) {
-	p.Lmsg.PushBack(msg)
-}
-
-func (p *PlayerObj) getMsg(packet packet.IGozillaPakcet) {
-	if p.Lmsg.Len() > 0 {
-		p.Lmsg.PushBack(packet)
-	}
-}
-
 type PlayerCollection struct {
-	players map[int]PlayerObj
+	players map[int]*PlayerObj
 }
 
 func (p *PlayerCollection) Init() {
-	p.players = make(map[int]PlayerObj)
+	p.players = make(map[int]*PlayerObj)
 }
 
 func (p *PlayerCollection) CreatePlayer(Nclient int) {

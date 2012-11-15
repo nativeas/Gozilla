@@ -1,16 +1,17 @@
 package login
 
 import (
-	"../../../core/engine"
+	// "../../../core/engine"
+	"../../modules"
 )
 
 type Login_Module struct {
 }
 
-func (l *Login_Module) GetModuleName() {
+func (l *Login_Module) GetModuleName() string {
 	return "Login_Module"
 }
 
-func (l *Login_Module) GetModuleCode() {
-	return 1
+func (l *Login_Module) GetModuleCode() byte {
+	return modules.MOD_LOGIN
 }

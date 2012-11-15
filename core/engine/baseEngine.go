@@ -7,38 +7,37 @@ import (
 type Engine struct {
 	Version string
 	Modules map[byte]BaseModule
-	players PlayerCollection
+	players *PlayerCollection
 }
 
-func (e *engine) Init(ver string) {
+func (e *Engine) Init(ver string) {
 	e.Version = ver
 	e.players = new(PlayerCollection)
+	e.players.Init()
 }
 
-func (e *engine) RegisterModule(m *BaseModule) {
+func (e *Engine) RegisterModule(m BaseModule) {
 	if e.Modules == nil {
 		e.Modules = make(map[byte]BaseModule)
 	}
 	e.Modules[m.GetModuleCode()] = m
 }
 
-func (e *engine) excute() bool {
+func (e *Engine) excute() bool {
 	p, cmd := e.players.Pump()
 	if p == nil {
 		return false
 	}
 	mod_code := cmd.GetMainCmd()
-	mod, ok = e.Modules[mod_code]
+	mod, ok := e.Modules[mod_code]
 	if ok {
 		mod.ExcuteCommand(p, cmd)
 		return true
 	}
-	if ok != true {
-		return false
-	}
+	return false
 }
 
-func (e *engine) ExcuteCycle() {
+func (e *Engine) ExcuteCycle() {
 	mark := e.excute()
 	for mark {
 		mark = e.excute()

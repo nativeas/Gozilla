@@ -2,6 +2,7 @@ package socket
 
 import (
 	// "../player"
+	"../packet"
 	"container/list"
 	"log"
 	"net"
@@ -72,7 +73,7 @@ func (r *RemoteRoom) remoteObjectReader(obj RemoteObject) {
 			r.closeRemoteObject(obj)
 			break
 		}
-		r.commandRouter.PushPacket(string(obj.ObjId), cmd)
+		r.commandRouter.PushPacket(obj.ObjId, cmd)
 
 		// log.Printf("OUTPUT TCMD,target:%s,mcmd:%d,smcd:%d,content:%s",
 		// 	tcmd.TaretId, cmd.MainCMD, cmd.SubCMD, cmd.ComandContent)
