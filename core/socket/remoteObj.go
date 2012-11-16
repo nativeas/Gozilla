@@ -2,11 +2,8 @@ package socket
 
 import (
 	"../packet"
-	"encoding/gob"
-	// "errors"
 	"log"
 	"net"
-	// "reflect"
 )
 
 type cmdObj interface{}
@@ -24,8 +21,6 @@ type RemoteObject struct {
 	Input      chan packet.IGozillaPacket
 	Output     chan SocketCommand
 	Close      chan int
-	enc        *gob.Encoder
-	dec        *gob.Decoder
 }
 
 func NewRemoteObject(conn net.Conn, id int) RemoteObject {
@@ -36,8 +31,6 @@ func NewRemoteObject(conn net.Conn, id int) RemoteObject {
 	object.Input = make(chan packet.IGozillaPacket)
 	object.Output = make(chan SocketCommand)
 	object.Close = make(chan int)
-	object.dec = gob.NewDecoder(object.Conn)
-	object.enc = gob.NewEncoder(object.Conn)
 	go object.daemon()
 	return *object
 }
@@ -59,13 +52,6 @@ DAEMON_LOOP:
 }
 
 func (r *RemoteObject) send(cmd packet.IGozillaPacket) {
-	// obj:= new(gobObj)
-	// // obj.Obj = cmd
-	// err := r.enc.Encode(cmd)
-	// if err != nil {
-	// 	log.Println("SEND()")
-	// 	log.Fatal(err)
-	// }
 	codec := new(PCodec)
 	codec.Write(r.Conn, cmd)
 	log.Println("send complete")
@@ -75,14 +61,5 @@ func (r *RemoteObject) Read() (cmd packet.IGozillaPacket, err error) {
 
 	codec := new(PCodec)
 	readObj, _ := codec.Read(r.Conn)
-	// readedObj := new(interface{})
-	// var q SocketCommand
-	// errb := r.dec.Decode(&readedObj)
-	// if errb != nil {
-	// 	log.Println("READ()", errb)
-	// 	//make some quit
-	// 	return *readedObj, errors.New("client disconnect")
-	// }
-	// r.Output <- *readedObj
 	return readObj, nil
 }

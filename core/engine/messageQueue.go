@@ -23,7 +23,7 @@ func (m *messageQueue) Init() {
 }
 
 // messageQueue -> Engine
-func (m *messageQueue) Pump() (nid int, packet packet.IGozillaPacket) {
+func (m *messageQueue) Pump() (nid int, pump_pkt packet.IGozillaPacket) {
 	if m.outputPacketQueue.Len() == 0 {
 		return -1, nil
 	}
@@ -33,7 +33,7 @@ func (m *messageQueue) Pump() (nid int, packet packet.IGozillaPacket) {
 	pkt_v := m.outputPacketQueue.Front()
 	pkt := pkt_v.Value
 	m.outputPacketQueue.Remove(pkt_v)
-	return cit, pkt
+	return cid.(int), pkt.(packet.IGozillaPacket)
 }
 
 // codec -> messageQueue
@@ -45,25 +45,24 @@ func (m *messageQueue) PushPacket(NclientId int, remoteId int, packet packet.IGo
 }
 
 //codec <- messageQueue
-func (m *messageQueue) RepyPacket() (NclientId int, remoteId int, packet packet.IGozillaPacket) {
+func (m *messageQueue) RepyPacket() (NclientId int, remoteId int, reply_pkt packet.IGozillaPacket) {
 	tmp := m.inputPacketClientQueue.Back()
 	nid := tmp.Value
 	m.inputPacketClientQueue.Remove(tmp)
 	tmp2 := m.inputPacketQueue.Back()
 	pkt := tmp2.Value
 	m.inputPacketQueue.Remove(tmp2)
-	if val, ok := m.clientMapping[nid]; ok {
-		nid = (nid - val/1000)
-		return nid, pkt
-	} else {
-		return -1, nil
+	if val, ok := m.clientMapping[nid.(int)]; ok {
+		cid := (nid.(int) - val/1000)
+		return cid, val, pkt.(packet.IGozillaPacket)
 	}
+	return -1, -1, nil
 }
 
 //messageQueue <- engine
 func (m *messageQueue) Push(nid int, packet packet.IGozillaPacket) {
-	if val, ok := m.clientMapping[nid]; ok {
-		m.inputPacketClientQueue.PushBack(packet)
+	if _, ok := m.clientMapping[nid]; ok {
+		m.inputPacketClientQueue.PushBack(nid)
 		m.inputPacketQueue.PushBack(packet)
 	} else {
 		log.Println("Push() nid %d not exist in clientMapping", nid)
