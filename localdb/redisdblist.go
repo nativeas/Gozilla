@@ -1,9 +1,10 @@
 package localdb
 
+/*[db总列表]*/
 const (
-	REDISDBINDEX_PLAYER  = 1
-	REDISDBINDEX_ACCOUNT = 2
-	REDISDBINDEX_MAX     = 3
+	REDISDBINDEX_PLAYER  = 0 //playermodeldb
+	REDISDBINDEX_ACCOUNT = 1
+	REDISDBINDEX_MAX     = 2
 )
 
 var RedisDBHashKeyArray = []string{

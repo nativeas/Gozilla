@@ -5,17 +5,23 @@ import (
 	"log"
 )
 
+type RedisRemoteData struct {
+	Nclient     int    //redis连接用途标记
+	Nport       int    //连接端口
+	Strremoteip string //连接IP
+}
+
 /*[redisobj 基本结构]*/
 type RedisObj struct {
-	Nclient int
-	c       redis.Conn
+	RemoteData RedisRemoteData
+	c          redis.Conn
 }
 
 /*[创建RedisObj连接]*/
 func CreateNewRedisConn(nID int, address string, password string) (*RedisObj, error) {
 	var err error
 	obj := new(RedisObj)
-	obj.Nclient = nID
+	obj.RemoteData.Nclient = nID
 	obj.c, err = redis.Dial("tcp", address)
 	if err != nil {
 		log.Println("New RedisConn Error!")
@@ -95,8 +101,5 @@ func (obj *RedisObj) HMGet(args ...interface{}) (reply interface{}, err error) {
 func ConvertString(value interface{}) (reply string, err error) {
 	var e0 error
 	r, e := redis.String(value, e0)
-	if e != nil {
-		log.Println("ConverString Fail!")
-	}
 	return r, e
 }
