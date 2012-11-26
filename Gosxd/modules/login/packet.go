@@ -27,9 +27,22 @@ type PreLogin struct {
 	Name string
 }
 
+type UserLogin struct {
+	basePacket
+	Name     string
+	Password string
+}
+
 func (p *PreLogin) Init() {
 	p.basePacket.Init()
 	p.SubCmd = CMD_PRELOGIN
+}
+
+func (u *UserLogin) Init() {
+	u.basePacket.Init()
+	u.SubCmd = CMD_LOGIN
+	u.Name = "dan"
+	u.Password = "123456"
 }
 
 func NewPreLogin() packet.IGozillaPacket {

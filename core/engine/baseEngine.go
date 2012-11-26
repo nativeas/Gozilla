@@ -35,7 +35,7 @@ func (e *Engine) excute() bool {
 	mod_code := cmd.GetMainCmd()
 	mod, ok := e.Modules[mod_code]
 	if ok {
-		mod.ExcuteCommand(p, cmd)
+		mod.ExcuteCommand(1, cmd)
 		return true
 	}
 	return false

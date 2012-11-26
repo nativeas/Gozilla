@@ -6,6 +6,9 @@ import (
 	"log"
 )
 
+//
+//实现一个消息队列
+//用于实现消息传送
 type messageQueue struct {
 	clientMapping           map[int]int
 	outputPacketQueue       *list.List

@@ -1,6 +1,7 @@
 package login
 
 import (
+	"../../../core/packet"
 	"../../modules"
 )
 
@@ -13,4 +14,8 @@ func (l *Login_Module) GetModuleName() string {
 
 func (l *Login_Module) GetModuleCode() byte {
 	return modules.MOD_LOGIN
+}
+
+func (l *Login_Module) ExcuteCommand(NclientId int, cmd packet.IGozillaPacket) {
+
 }

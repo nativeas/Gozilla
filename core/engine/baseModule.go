@@ -7,5 +7,5 @@ import (
 type BaseModule interface {
 	GetModuleName() string
 	GetModuleCode() byte
-	ExcuteCommand(p *PlayerObj, cmd packet.IGozillaPacket)
+	ExcuteCommand(NclientId int, cmd packet.IGozillaPacket)
 }

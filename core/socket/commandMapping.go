@@ -22,7 +22,10 @@ func GetCommand(t string) packet.IGozillaPacket {
 	if fun, ok := cmds[t]; ok {
 		return fun()
 	}
-	log.Fatal(
-		t, "is not exist in CommandMapping")
+	log.Println(t, "is not exist in CommandMapping")
 	return nil
+}
+
+func GetCommandMark(pkt packet.IGozillaPacket) string {
+	return reflect.TypeOf(pkt).Name()
 }

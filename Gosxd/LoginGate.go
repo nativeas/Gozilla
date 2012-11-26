@@ -13,6 +13,15 @@ func main() {
 	eng := new(engine.Engine)
 	eng.Init()
 	s := socket.NewRemoteRoom("127.0.0.1:8080", eng)
+	//s := socket.NewGateObjet("127.0.0.1:8080", "127.0.0.1:8001")
 	log.Print(s)
+	// s.Dial()
 	s.StartDaemon()
+	var ch chan int
+	for {
+		select {
+		case <-ch:
+			log.Print("He")
+		}
+	}
 }

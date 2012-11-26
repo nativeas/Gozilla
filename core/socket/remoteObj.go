@@ -21,6 +21,7 @@ type RemoteObject struct {
 	Input      chan packet.IGozillaPacket
 	Output     chan SocketCommand
 	Close      chan int
+	codec      RemoteCodec
 }
 
 func NewRemoteObject(conn net.Conn, id int) RemoteObject {
@@ -31,6 +32,7 @@ func NewRemoteObject(conn net.Conn, id int) RemoteObject {
 	object.Input = make(chan packet.IGozillaPacket)
 	object.Output = make(chan SocketCommand)
 	object.Close = make(chan int)
+	object.codec = new(GobCodec)
 	go object.daemon()
 	return *object
 }
@@ -52,14 +54,12 @@ DAEMON_LOOP:
 }
 
 func (r *RemoteObject) send(cmd packet.IGozillaPacket) {
-	codec := new(PCodec)
-	codec.Write(r.Conn, cmd)
+	r.codec.Write(r.Conn, cmd)
 	log.Println("send complete")
 }
 
 func (r *RemoteObject) Read() (cmd packet.IGozillaPacket, err error) {
+	readObj, err := r.codec.Read(r.Conn)
 
-	codec := new(PCodec)
-	readObj, _ := codec.Read(r.Conn)
-	return readObj, nil
+	return readObj, err
 }

@@ -45,7 +45,7 @@ func (r *RemoteRoom) daemon() {
 	defer lis.Close()
 
 	for {
-		log.Println("waiting for new connection!")
+		log.Println("listening Addr@", r.listenAddr, "waiting for new connection!")
 		conn, error := lis.Accept()
 		if error != nil {
 			log.Println(error)
@@ -74,10 +74,6 @@ func (r *RemoteRoom) remoteObjectReader(obj RemoteObject) {
 			break
 		}
 		r.commandRouter.PushPacket(obj.ObjId, cmd)
-
-		// log.Printf("OUTPUT TCMD,target:%s,mcmd:%d,smcd:%d,content:%s",
-		// 	tcmd.TaretId, cmd.MainCMD, cmd.SubCMD, cmd.ComandContent)
-		//r.Output <- *tcmd
 	}
 }
 

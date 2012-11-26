@@ -21,16 +21,24 @@ func main() {
 	var obj packet.IGozillaPacket = new(login.PreLogin)
 	obj.Init()
 	r.Input <- obj
-	// obj = socket.NewSocketCommand(3, 2, "fff")
-	// r.Input <- obj
+	obj = new(login.UserLogin)
+	obj.Init()
+	r.Input <- obj
 	// obj = socket.NewSocketCommand(4, 2, "fff")
 	// r.Input <- obj
 	// obj = socket.NewSocketCommand(5, 2, "fff")
 	// r.Input <- obj
+	conn.Close()
+	return
 	for {
-		_, err := r.Read()
+		log.Println("do read")
+		cont, err := r.Read()
 		if err != nil {
 			log.Fatal("exit")
 		}
+		if cont == nil {
+			log.Fatal("closed")
+		}
+		log.Println("Content = ", cont)
 	}
 }
