@@ -3,7 +3,7 @@ package socket
 import (
 	"../packet"
 	"log"
-	"reflect"
+	"strconv"
 )
 
 var cmds map[string]func() packet.IGozillaPacket
@@ -13,12 +13,12 @@ func init() {
 }
 
 func RegisterCommand(cmd packet.IGozillaPacket, fun func() packet.IGozillaPacket) {
-	t := reflect.TypeOf(cmd)
-	k := t.Name()
+	k := GetCommandMark(cmd)
+	log.Println("k", k)
 	cmds[k] = fun
 }
 
-func GetCommand(t string) packet.IGozillaPacket {
+func GetCommand(t string) interface{} {
 	if fun, ok := cmds[t]; ok {
 		return fun()
 	}
@@ -27,5 +27,8 @@ func GetCommand(t string) packet.IGozillaPacket {
 }
 
 func GetCommandMark(pkt packet.IGozillaPacket) string {
-	return reflect.TypeOf(pkt).Name()
+	mcmd := strconv.Itoa(int(pkt.GetMainCmd()))
+	scmd := strconv.Itoa(int(pkt.GetSubCmd()))
+	mark := "cmd@" + mcmd + "_" + scmd
+	return mark
 }

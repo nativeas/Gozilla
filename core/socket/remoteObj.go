@@ -32,7 +32,7 @@ func NewRemoteObject(conn net.Conn, id int) RemoteObject {
 	object.Input = make(chan packet.IGozillaPacket)
 	object.Output = make(chan SocketCommand)
 	object.Close = make(chan int)
-	object.codec = new(GobCodec)
+	object.codec = new(GobCodec2)
 	go object.daemon()
 	return *object
 }

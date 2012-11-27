@@ -51,7 +51,13 @@ func NewPreLogin() packet.IGozillaPacket {
 	return p
 }
 
+func NewUserLogin() packet.IGozillaPacket {
+	p := new(UserLogin)
+	p.Init()
+	return p
+}
+
 func init() {
-	p := NewPreLogin()
-	socket.RegisterCommand(packet.IGozillaPacket(p), NewPreLogin)
+	socket.RegisterCommand(packet.IGozillaPacket(NewPreLogin()), NewPreLogin)
+	socket.RegisterCommand(packet.IGozillaPacket(NewUserLogin()), NewUserLogin)
 }

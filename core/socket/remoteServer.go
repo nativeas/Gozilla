@@ -73,7 +73,9 @@ func (r *RemoteRoom) remoteObjectReader(obj RemoteObject) {
 			r.closeRemoteObject(obj)
 			break
 		}
+		log.Println("dolog")
 		r.commandRouter.PushPacket(obj.ObjId, cmd)
+		log.Println("dolog")
 	}
 }
 
